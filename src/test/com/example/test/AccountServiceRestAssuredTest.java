@@ -11,7 +11,7 @@ public class AccountServiceRestAssuredTest {
 
     @Before
     public void setup() {
-        RestAssured.baseURI = "http://localhost";
+        RestAssured.baseURI = "http://account-service";
         RestAssured.port = 2222;
     }
 
