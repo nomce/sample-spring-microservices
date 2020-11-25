@@ -1,9 +1,83 @@
 pipeline {
     agent any
+
     stages {
-        stage('build') {
+        
+        stage('Checkout code') {
             steps {
-                sh 'mvn --version'
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    git url: 'https://github.com/nomce/sample-spring-microservices.git'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    sh 'mvn clean install'
+                }
+            }
+        }
+
+        stage('Create Images') {
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    dir ('customer-service') {
+                        script{
+                            docker.build "customer-service:latest"
+                        }
+                    }
+                    dir ('account-service') {
+                        script{
+                            docker.build "account-service:latest"
+                        }
+                    }
+                    dir ('discovery-service') {
+                        script{
+                            docker.build "discovery-service:latest"
+                        }
+                    }
+                    dir ('gateway-service') {
+                        script{
+                            docker.build "gateway-service:latest"
+                        }
+                    }
+                    dir ('zipkin-service') {
+                        script{
+                            docker.build "zipkin-service:latest"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage ('Run Containers') {
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    script{
+                        sh 'docker-compose up -d'
+                    }
+                }
+            }
+        }
+        
+        stage ('Tests') {
+            steps {
+                sh 'mvn clean compiler:testCompile surefire:test'
+            }
+        }
+        
+        stage ('Final') {
+
+            steps{
+                post {
+                    // If Maven was able to run the tests, even if some of the test
+                    // failed, record the test results and archive the jar file.
+                    success {
+                        junit '**/target/surefire-reports/TEST-*.xml'
+                        archiveArtifacts 'target/*.jar'
+                    }
+                }
             }
         }
     }
