@@ -21,7 +21,7 @@ public class StepDefinitions {
 
     @When("I send a GET request to root")
     public void i_send_a_GET_request_to_root() {
-        request = new HttpGet("http://localhost:2222");
+        request = new HttpGet("http://account-service:2222");
     }
 
     @Then("I should get the list of elements")
