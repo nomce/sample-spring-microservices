@@ -1,5 +1,6 @@
 
 # Introduction  
+
 This test plan is a description of the test activity for the Sample Spring Microservices POC project.   
 It identifies the product requirements, assumptions, dependencies and risks.   
 This test plan will be updated in the earliest possible time to reflect the actual situation of the test implementation.  
@@ -89,14 +90,14 @@ from the client to the server, the server processing time, and the network trans
 ## Performance  
 
 |ID| Test slug | Test steps | Ref.  
-|--|--|--|--|--|  
+|---|---|---|---|  
 |01|customer-service response time|1. Start timer<br>2. Send ``GET /`` request to the server<br>3. Wait Until the response arrives<br>4. Stop Timer<br>5. Verify the contents of the response, shall contain a list of elements.<br>6. Elapsed time shall be less than 1s|1.1
 |02|account-service response time|1. Start timer<br>2. Send ``GET /`` request to the server<br>3. Wait Until the response arrives<br>4. Stop Timer<br>5. Verify the contents of the response, shall contain a list of elements.<br>6. Elapsed time shall be less than 1s|1.1  
   
 ## account-service  
 
 |ID| Test slug | Test steps | Ref.   
-|--|--|--|--|--|  
+|---|---|---|---|
 |03|Account Initial Elements exist|1. Send ``GET /`` request to the server<br>2. The initial list of elements shall be received | 2.1  
 |04|Account Retrieve existing element on / endpoint|1. Send ``GET /1`` request to the server<br>2. The JSON object ``{"id": 1, "customerId": 1,"number": "111111"}`` shall be received | 2.2 
 |05|Account Retrieve non-existing element on / endpoint|1. Send ``GET /0`` request to the server<br>2. The JSON object ``{"timestamp": 1606130410813, "status": 404, "error": "Not Found", "exception": "pl.piomin.microservices.account.exceptions.AccountNotFoundException", "message": "No such account with id : 0", "path": "/0" }`` shall be received | 2.2 
@@ -114,7 +115,7 @@ from the client to the server, the server processing time, and the network trans
 ## customer-service  
 
 |ID| Test slug | Test steps | Ref.   
-|--|--|--|--|--|  
+|---|---|---|---|
 |16|Customer Initial Elements exist|1. Send ``GET /`` request to the server<br>2. The initial list of elements shall be received | 3.1  
 |17|Customer Retrieve existing element on / endpoint|1. Send ``GET /1`` request to the server<br>2. The JSON object ``{"id":1,"pesel":"12345","name":"Adam Kowalski","type":"INDIVIDUAL","accounts":[{"id":1,"number":"111111"},{"id":5,"number":"555555"}]}`` shall be received | 3.2 
 |18|Customer Retrieve non-existing element on / endpoint|1. Send ``GET /0`` request to the server<br>2. The JSON object ``{"timestamp":1606204094576,"status":404,"error":"Not Found","exception":"pl.piomin.microservices.customer.exceptions.CustomerNotFoundException","message":"No such customer with id : 0","path":"/0"}`` shall be received | 3.2 
